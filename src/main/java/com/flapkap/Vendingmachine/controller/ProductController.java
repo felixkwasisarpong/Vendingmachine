@@ -16,7 +16,7 @@ public class ProductController {
     @PostMapping
     public Product createProduct(@RequestBody Product product) {
         String loggedInUsername = SecurityContextHolder.getContext().getAuthentication().getName();
-        if (loggedInUsername.equals("seller")) {
+        if ("seller".equals(loggedInUsername)) {
             return productService.createProduct(product);
         } else {
             throw new SecurityException("Only the seller can create a product.");
@@ -32,7 +32,7 @@ public class ProductController {
     public Product updateProduct(@PathVariable Long productId, @RequestBody Product product) {
         String loggedInUsername = SecurityContextHolder.getContext().getAuthentication().getName();
         Product existingProduct = productService.getProduct(productId);
-        if (loggedInUsername.equals("seller") && loggedInUsername.equals(existingProduct.getId().toString())) {
+        if ("seller".equals(loggedInUsername) && loggedInUsername.equals(existingProduct.getId().toString())) {
             product.setId(productId);
             return productService.updateProduct(product);
         } else {
@@ -44,7 +44,7 @@ public class ProductController {
     public void deleteProduct(@PathVariable Long productId) {
         String loggedInUsername = SecurityContextHolder.getContext().getAuthentication().getName();
         Product existingProduct = productService.getProduct(productId);
-        if (loggedInUsername.equals("seller") && loggedInUsername.equals(existingProduct.getId().toString())) {
+        if ("seller".equals(loggedInUsername) && loggedInUsername.equals(existingProduct.getId().toString())) {
             productService.deleteProduct(productId);
         } else {
             throw new SecurityException("Only the seller who created the product can delete it.");
